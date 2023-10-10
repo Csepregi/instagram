@@ -6,6 +6,7 @@ const colors = {
   lightgray: '#cccccc',
   accent: '#ED4956',
   border: '#dcdcdc',
+  error: '#ED4956',
 };
 
 export default colors;

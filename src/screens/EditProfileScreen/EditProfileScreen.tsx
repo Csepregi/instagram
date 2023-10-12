@@ -83,7 +83,7 @@ const EditProfileScreen = () => {
   const onChangePhoto = () => {
     launchImageLibrary(
       {mediaType: 'photo'},
-      ({didCancel, errorCode,errorMessage, assets}) => {
+      ({didCancel, errorCode, errorMessage, assets}) => {
         if (!didCancel && !errorCode && assets && assets.length > 0) {
           setSelectedPhoto(assets[0]);
         }

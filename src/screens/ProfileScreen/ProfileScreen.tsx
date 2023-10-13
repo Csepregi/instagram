@@ -17,6 +17,7 @@ const ProfileScreen = () => {
   >();
 
   const userId = route.params?.userId;
+  console.warn(userId);
   // query the user with userId
   //navigation.setOptions({title: userId});
 

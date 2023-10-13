@@ -1,9 +1,9 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
-import { Image } from 'react-native';
+import {Image} from 'react-native';
 import logo from '../assets/images/logo.png';
-import RootNavigator from './types';
+import {RootNavigator} from './types';
 
 const Stack = createNativeStackNavigator<RootNavigator>();
 

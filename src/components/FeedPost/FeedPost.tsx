@@ -4,6 +4,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
+import {useNavigation} from '@react-navigation/native';
+import {FeedNavigationProp} from '../../navigation/types';
 import React from 'react';
 import colors from '../../theme/colors';
 import styles from './style';
@@ -19,6 +21,7 @@ interface IFeedPost {
 }
 
 const FeedPost = ({post, isVisible}: IFeedPost) => {
+  const navigation = useNavigation<FeedNavigationProp>();
   const [isDescriptionExpended, setIsDescriptionExpended] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
 
@@ -52,6 +55,14 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
     );
   }
 
+  const navigateToUser = () => {
+    navigation.navigate('UserProfile', {userId: post.user.id});
+  };
+
+  const navigateToComments = () => {
+    navigation.navigate('Comments', {postId: post.id});
+  };
+
   return (
     <View style={styles.post}>
       {/* Hedaer */}
@@ -62,7 +73,7 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
           }}
           style={styles.userAvatar}
         />
-        <Text style={styles.userName}>{post.user.username}</Text>
+        <Text style={styles.userName} onPress={navigateToUser}>{post.user.username}</Text>
         <Entypo name="add-user" size={16} style={styles.threeDots} />
       </View>
       {/* Content */}
@@ -111,7 +122,7 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
           {isDescriptionExpended ? 'less' : 'more'}
         </Text>
         {/* Comments */}
-        <Text>View all {post.nofComments} comments</Text>
+        <Text onPress={navigateToComments}>View all {post.nofComments} comments</Text>
         {post.comments.map(comment => (
           <Comment key={comment.id} comment={comment} />
         ))}

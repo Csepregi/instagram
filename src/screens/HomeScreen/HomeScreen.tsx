@@ -8,7 +8,6 @@ const HomeScreen = () => {
   const viewabalityConfig: ViewabilityConfig = {
     itemVisiblePercentThreshold: 51,
   };
-
   const onViewableItemsChanged = useRef(
     ({viewableItems}: {viewableItems: Array<ViewToken>}) => {
       if (viewableItems.length > 0) {

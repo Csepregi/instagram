@@ -4,6 +4,7 @@ import {
   StyleSheet,
   useWindowDimensions,
   ScrollView,
+  Alert,
 } from 'react-native';
 import Logo from '../../../assets/images/logo.png';
 import FormInput from '../components/FormInput';
@@ -12,6 +13,9 @@ import SocialSignInButtons from '../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import {SignInNavigationProp} from '../../../types/navigation';
+import { Auth } from 'aws-amplify';
+import { useState } from 'react';
+import { useAuthContext } from '../../../context/AuthContext';
 
 type SignInData = {
   username: string;
@@ -22,11 +26,29 @@ const SignInScreen = () => {
   const {height} = useWindowDimensions();
   const navigation = useNavigation<SignInNavigationProp>();
 
-  const {control, handleSubmit} = useForm<SignInData>();
+  const {control, handleSubmit, reset} = useForm<SignInData>();
+  const [loading, setLoading] = useState(false);
+  const {setUser} = useAuthContext();
 
-  const onSignInPressed = (data: SignInData) => {
-    console.log(data);
+  const onSignInPressed = async ({username, password}: SignInData) => {
+    if(loading) {
+      return
+    }
+    setLoading(true);
     // validate user
+    try {
+      const cognitoUser = await Auth.signIn(username, password);
+      setUser(cognitoUser);
+    } catch (error) {
+      if((error as Error).message === 'UserNotConfirmedException') {
+        navigation.navigate('Confirm email', {username})
+      }
+      Alert.alert('OOPS', (error as Error).message);
+    } finally {
+      setLoading(false);
+      reset()
+    }
+   
     // navigation.navigate('Home');
   };
 

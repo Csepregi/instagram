@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
 import FormInput from '../components/FormInput';
 import CustomButton from '../components/CustomButton';
 import SocialSignInButtons from '../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/core';
 import {useForm} from 'react-hook-form';
 import {ForgotPasswordNavigationProp} from '../../../types/navigation';
+import { Auth } from 'aws-amplify';
+import jestConfig from '../../../../jest.config';
 
 type ForgotPasswordData = {
   username: string;
@@ -14,10 +16,19 @@ type ForgotPasswordData = {
 const ForgotPasswordScreen = () => {
   const {control, handleSubmit} = useForm<ForgotPasswordData>();
   const navigation = useNavigation<ForgotPasswordNavigationProp>();
+  const [loading, setLoading] = useState(false);
 
-  const onSendPressed = (data: ForgotPasswordData) => {
-    console.warn(data);
-    navigation.navigate('New password');
+  const onSendPressed = async ({username}: ForgotPasswordData) => {
+    try {
+      const response =  await Auth.forgotPassword(username);
+      Alert.alert('Check your email ', 'The code has been sent to');
+      navigation.navigate('New password');
+    } catch (error) {
+      Alert.alert('Oops', (error as Error).message)
+    } finally {
+      setLoading(false)
+    }
+   
   };
 
   const onSignInPress = () => {

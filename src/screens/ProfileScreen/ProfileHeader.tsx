@@ -4,7 +4,7 @@ import user from '../../assets/data/user.json';
 import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import {ProfileNavigationProp} from '../../types/navigation';
-import {useAuthenticator} from '@aws-amplify/ui-react-native';
+import {useAuthenticator, withAuthenticator} from '@aws-amplify/ui-react-native';
 
 const ProfileHeader = () => {
   const navigation = useNavigation<ProfileNavigationProp>();
@@ -43,4 +43,4 @@ const ProfileHeader = () => {
   );
 };
 
-export default ProfileHeader;
+export default withAuthenticator(ProfileHeader);

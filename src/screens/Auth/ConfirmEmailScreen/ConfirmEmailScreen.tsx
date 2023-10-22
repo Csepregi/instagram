@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
 import FormInput from '../components/FormInput';
 import CustomButton from '../components/CustomButton';
 import SocialSignInButtons from '../components/SocialSignInButtons';
@@ -10,6 +10,7 @@ import {
   ConfirmEmailRouteProp,
 } from '../../../types/navigation';
 import {useRoute} from '@react-navigation/native';
+import { Auth } from 'aws-amplify';
 
 type ConfirmEmailData = {
   username: string;
@@ -18,14 +19,23 @@ type ConfirmEmailData = {
 
 const ConfirmEmailScreen = () => {
   const route = useRoute<ConfirmEmailRouteProp>();
-  const {control, handleSubmit} = useForm<ConfirmEmailData>({
+  const {control, handleSubmit, watch} = useForm<ConfirmEmailData>({
     defaultValues: {username: route.params.username},
   });
-
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation<ConfirmEmailNavigationProp>();
-
-  const onConfirmPressed = (data: ConfirmEmailData) => {
-    console.warn(data);
+  const username = watch('username');
+  const onConfirmPressed = async ({username, code}: ConfirmEmailData) => {
+    if (loading) {
+      return
+    }
+    try {
+      await Auth.confirmSignUp(username, code);
+    } catch (error) {
+      Alert.alert('Oops', (error as Error).message)
+    } finally {
+      setLoading(false)
+    }
     navigation.navigate('Sign in');
   };
 
@@ -33,7 +43,13 @@ const ConfirmEmailScreen = () => {
     navigation.navigate('Sign in');
   };
 
-  const onResendPress = () => {
+  const onResendPress = async () => {
+    try {
+      await Auth.resendSignUp(username);
+      Alert.alert('Check your email', 'The code has benn sent')
+    } catch (error) {
+      Alert.alert('Oops', (error as Error).message)
+    }
     console.warn('onResendPress');
   };
 

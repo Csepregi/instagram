@@ -1,12 +1,14 @@
-import {FlatList, Image, Text, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import styles from './styles';
 import user from '../../assets/data/user.json';
 import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
-import {ProfileNavigationProp} from '../../navigation/types';
+import {ProfileNavigationProp} from '../../types/navigation';
+import {useAuthenticator} from '@aws-amplify/ui-react-native';
 
 const ProfileHeader = () => {
   const navigation = useNavigation<ProfileNavigationProp>();
+  const {signOut} = useAuthenticator();
   return (
     <View style={styles.root}>
       <View style={styles.headerRow}>
@@ -34,7 +36,7 @@ const ProfileHeader = () => {
           text={'Edit Profile'}
           onPress={() => navigation.navigate('Edit Profile')}
         />
-        <Button text={'Go Back'} onPress={() => navigation.goBack()} />
+        <Button text={'SignOut'} onPress={signOut} />
         {/* or topToTop */}
       </View>
     </View>

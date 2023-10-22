@@ -2,7 +2,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import CommentsScreen from '../screens/CommentsScreen';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import colors from '../theme/colors';
-import {SearchTabNavigatorParamList} from './types';
+import {SearchTabNavigatorParamList} from '../types/navigation';
 import UsersSearchScreen from '../screens/UsersSearchScreen';
 
 const Tab = createMaterialTopTabNavigator<SearchTabNavigatorParamList>();

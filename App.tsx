@@ -1,11 +1,10 @@
-// import HomeScreen from './src/screens/HomeScreen/HomeScreen';
-// import CommentsScreen from './src/screens/CommentsScreen';
-// import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen';
-// import EditProfileScreen from './src/screens/EditProfileScreen/EditProfileScreen';
-// import PostUploadScreen from './src/screens/PostUploadScreen';
-// import {NavigationContainer} from '@react-navigation/native';
+import {Amplify} from 'aws-amplify';
+import {withAuthenticator} from '@aws-amplify/ui-react-native';
+import config from './src/aws-exports';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Navigation from './src/navigation';
+
+Amplify.configure(config);
 
 const App = () => {
   return (

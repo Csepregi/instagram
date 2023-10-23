@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.instagram"
+    namespace "dev.csepregis.photos"
     defaultConfig {
-        applicationId "com.instagram"
+        applicationId "dev.csepregis.photos"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

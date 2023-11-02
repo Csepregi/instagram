@@ -10,12 +10,12 @@ import { useAuthContext } from '../context/AuthContext';
 const Stack = createNativeStackNavigator<RootNavigator>();
 
 const linking: LinkingOptions<RootNavigator> = {
-  prefixes: ['notjustphotos://', 'https://notjustphotos.com'],
+  prefixes: ['csepregisphotos://', 'https://csepregisphotos.com'],
   config: {
     initialRouteName: 'Home',
     screens: {
-      Comments: 'comments', // notjustphotos:// comments
-      // // notjustphotos:// user/123
+      Comments: 'comments', // csepregisphotos:// comments
+      // // csepregisphotos:// user/123
       Home: {
         screens: {
           HomeStack: {

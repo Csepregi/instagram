@@ -83,7 +83,7 @@
 			<dict>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>notjustphotos</string>
+					<string>csepregisphotos</string>
 				</array>
 			</dict>
 		</array>

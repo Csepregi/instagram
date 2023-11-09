@@ -7,18 +7,14 @@ type UserType = CognitoUser | null | undefined;
 
 type AuthContextType = {
     user: UserType,
-    setUser: Dispatch<SetStateAction<UserType>>,
 }
 
-const AuthContext = createContext<AuthContextType>({user: undefined,  setUser: () => {}});
-
-
+const AuthContext = createContext<AuthContextType>({user: undefined});
 
 const AuthContextProvider = ({children}: {children: ReactNode}) => {
     const [user, setUser] = useState<UserType>(undefined)
 
-    useEffect(() => {
-        const checkUser = async () => {
+    const checkUser = async () => {
         try {
             const authUser = await Auth.currentAuthenticatedUser({bypassCache: true})
             setUser(authUser);
@@ -26,6 +22,8 @@ const AuthContextProvider = ({children}: {children: ReactNode}) => {
             setUser(null)
             }
         }
+
+    useEffect(() => {
         checkUser();
     },[])
 
@@ -35,13 +33,16 @@ const AuthContextProvider = ({children}: {children: ReactNode}) => {
             if (event === 'signOut') {
                 setUser(null);
             }
+            if (event === 'signIn') {
+                checkUser();
+            }
         }
         const subscription = Hub.listen('auth', listener);
         return () => subscription()
     },[])
 
     return (
-        <AuthContext.Provider value={{user, setUser}}>
+        <AuthContext.Provider value={{user}}>
             {children}
         </AuthContext.Provider>
     )

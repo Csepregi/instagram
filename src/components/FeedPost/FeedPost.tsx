@@ -10,13 +10,14 @@ import React from 'react';
 import colors from '../../theme/colors';
 import styles from './style';
 import Comment from '../Comment/Comment';
-import {IPost} from '../../types/models';
 import DoublePressable from '../DoublePressable';
 import Carousel from '../Carousel';
 import VideoPlayer from '../VideoPlayer';
+import { Post } from '../../API';
+import { DEFAULT_USER_IMAGE } from '../../config';
 
 interface IFeedPost {
-  post: IPost;
+  post: Post;
   isVisible: boolean;
 }
 
@@ -39,7 +40,7 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
       <DoublePressable onDoublePress={toggleLike}>
         <Image
           source={{
-            uri: post.user.image,
+            uri: post?.image || DEFAULT_USER_IMAGE,
           }}
           style={styles.image}
         />
@@ -56,7 +57,9 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
   }
 
   const navigateToUser = () => {
-    navigation.navigate('UserProfile', {userId: post.user.id});
+    if (post.User) {
+      navigation.navigate('UserProfile', {userId: post.User?.id});
+    }
   };
 
   const navigateToComments = () => {
@@ -69,11 +72,11 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
       <View style={styles.header}>
         <Image
           source={{
-            uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/images/1.jpg',
+            uri: post.User?.image || DEFAULT_USER_IMAGE,
           }}
           style={styles.userAvatar}
         />
-        <Text style={styles.userName} onPress={navigateToUser}>{post.user.username}</Text>
+        <Text style={styles.userName} onPress={navigateToUser}>{post.User?.username}</Text>
         <Entypo name="add-user" size={16} style={styles.threeDots} />
       </View>
       {/* Content */}
@@ -115,16 +118,16 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
 
         {/* Post Description */}
         <Text style={styles.text} numberOfLines={2}>
-          <Text style={styles.bold}>{post.user.username} </Text>
+          <Text style={styles.bold}>{post.User?.username} </Text>
           {post.description}
         </Text>
         <Text onPress={toggleDescriptionExpended}>
           {isDescriptionExpended ? 'less' : 'more'}
         </Text>
         {/* Comments */}
-        <Text onPress={navigateToComments}>View all {post.nofComments} comments</Text>
-        {post.comments.map(comment => (
-          <Comment key={comment.id} comment={comment} />
+        <Text onPress={navigateToComments}>View all {post.nofComments} comments</Text> 
+        {(post.Comments?.items || [])?.map(comment => (
+          comment && <Comment key={comment.id} comment={comment} />
         ))}
         {/* Posted Date */}
         <Text>{post.createdAt}</Text>

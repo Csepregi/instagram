@@ -5,25 +5,13 @@ import FeedPost from '../../components/FeedPost';
 import { gql, useQuery } from '@apollo/client';
 import { ActivityIndicator } from 'react-native';
 import { listPosts } from './queries'
+import { ListPostsQuery, ListPostsQueryVariables } from '../../API';
+import ApiErrorMessage from '../../components/ApiErrorMessage';
 
 
 const HomeScreen = () => {
   const [activePostId, setActivePostId] = useState<string | null>(null);
-  //const [posts, setPosts] = useState([]);
-  const {data, loading, error} = useQuery(listPosts);
-
-
-  // useEffect(() => {
-  //   const fetchPosts = async () => {
-  //     const response = await API.graphql(graphqlOperation(listPosts));
-  //     console.log(response.data.listPosts.items);
-  //     setPosts(response.data.listPosts.items);
-  //   };
-
-  //   fetchPosts();
-  // }, []);
-
-
+  const {data, loading, error} = useQuery<ListPostsQuery, ListPostsQueryVariables>(listPosts);
 
   const viewabalityConfig: ViewabilityConfig = {
     itemVisiblePercentThreshold: 51,
@@ -40,21 +28,21 @@ const HomeScreen = () => {
     return <ActivityIndicator />
   }
   if (error) {
-    return <Text>{error.message}</Text>
+    return <ApiErrorMessage title='Error fetching posts' message={error.message} />
   }
 
-  const posts = data.listPosts.items;
+  const posts = data?.listPosts?.items || [];
 
   return (
     <FlatList
       data={posts}
       renderItem={({item}) => (
-        <FeedPost post={item} isVisible={activePostId === item.id} />
+        item && <FeedPost post={item} isVisible={activePostId === item.id} />
       )}
       showsVerticalScrollIndicator={false}
-      keyExtractor={item => `post-${item.createdAt}`}
+      keyExtractor={item => `post-${item?.createdAt}`}
       onViewableItemsChanged={onViewableItemsChanged.current}
-      viewabalityConfig={viewabalityConfig}
+      viewabilityConfig={viewabalityConfig}
     />
   );
 };

@@ -63,7 +63,10 @@ exports.handler = async (event, context) => {
   const newUser = {
      id: sub,
      name,
-     email
+     email,
+     noPosts: 0,
+     noFollowers: 0,
+     noFollowings: 0
   };
   // check if the user already exists
   if (!(await userExists(newUser.id))) {

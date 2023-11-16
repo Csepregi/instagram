@@ -7,9 +7,10 @@ type UserType = CognitoUser | null | undefined;
 
 type AuthContextType = {
     user: UserType,
+    userId: string,
 }
 
-const AuthContext = createContext<AuthContextType>({user: undefined});
+const AuthContext = createContext<AuthContextType>({user: undefined, userId: ''});
 
 const AuthContextProvider = ({children}: {children: ReactNode}) => {
     const [user, setUser] = useState<UserType>(undefined)
@@ -41,8 +42,10 @@ const AuthContextProvider = ({children}: {children: ReactNode}) => {
         return () => subscription()
     },[])
 
+    console.log("User constext ", user)
+
     return (
-        <AuthContext.Provider value={{user}}>
+        <AuthContext.Provider value={{user, userId: user?.attributes?.sub}}>
             {children}
         </AuthContext.Provider>
     )

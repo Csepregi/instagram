@@ -36,7 +36,7 @@ type User @model @auth(rules: [{allow: public}]) {
   image: String
   noPosts: Int!
   bio: String
-  username: String
+  username: String @index(name: "usersByUsername", queryField: "usersByUsername")
   email: String!
   noFollowers: Int!
   noFollowings: Int!

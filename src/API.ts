@@ -2080,6 +2080,48 @@ export type ListUsersQuery = {
   } | null,
 };
 
+export type UsersByUsernameQueryVariables = {
+  username: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UsersByUsernameQuery = {
+  usersByUsername?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
+      id: string,
+      name: string,
+      image?: string | null,
+      noPosts: number,
+      bio?: string | null,
+      username?: string | null,
+      email: string,
+      noFollowers: number,
+      noFollowings: number,
+      website?: string | null,
+      Posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      Comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      Likes?:  {
+        __typename: "ModelLikeConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type OnCreateLikeSubscriptionVariables = {
   filter?: ModelSubscriptionLikeFilterInput | null,
 };

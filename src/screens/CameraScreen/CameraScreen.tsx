@@ -14,11 +14,14 @@ import React, {useCallback, useEffect, useState, useRef, useMemo} from 'react';
 import {SCREEN_HEIGHT, SCREEN_WIDTH, MAX_ZOOM_FACTOR} from '../../constants';
 import colors from '../../theme/colors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
+import { CameraNavigationProp } from '../../types/navigation';
 
-const PostUploadScreen = () => {
+const CameraScreen = () => {
   // const devices = Camera.getAvailableCameraDevices();
   // const device = devices.find(d => d.position === 'back');
   //const device = useCameraDevice('back');
+  const navigation = useNavigation<CameraNavigationProp>();
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   //const [cameraType, setCameraType] = useState(Camera.Con);
   const [loading, setLoading] = useState(null);
@@ -66,6 +69,15 @@ const PostUploadScreen = () => {
 
   const minZoom = device?.minZoom ?? 1;
   const maxZoom = Math.min(device?.maxZoom ?? 1, MAX_ZOOM_FACTOR);
+
+  const navigateToCreateScreen = () => {
+    navigation.navigate('Create', {
+      images: [
+        'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/images/4.jpg',
+        'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/images/2.jpg'
+      ],
+    });
+  }
 
   // const cameraAnimatedProps = useAnimatedProps(() => {
   //   const z = Math.max(Math.min(zoom.value, maxZoom), minZoom);
@@ -164,6 +176,13 @@ const PostUploadScreen = () => {
             color={colors.white}
           />
         </Pressable>
+        <Pressable onPress={navigateToCreateScreen}>
+          <MaterialIcons
+            name="arrow-forward-ios"
+            size={30}
+            color={colors.white}
+          />
+        </Pressable>
       </View>
     </View>
   );
@@ -194,4 +213,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostUploadScreen;
+export default CameraScreen;

@@ -15,6 +15,7 @@ import Carousel from '../Carousel';
 import VideoPlayer from '../VideoPlayer';
 import { Post } from '../../API';
 import { DEFAULT_USER_IMAGE } from '../../config';
+import PostMenu from './PostMenu';
 
 interface IFeedPost {
   post: Post;
@@ -77,7 +78,8 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
           style={styles.userAvatar}
         />
         <Text style={styles.userName} onPress={navigateToUser}>{post.User?.username}</Text>
-        <Entypo name="add-user" size={16} style={styles.threeDots} />
+        <PostMenu post={post}/>
+        
       </View>
       {/* Content */}
       {content}

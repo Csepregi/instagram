@@ -5,17 +5,20 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Navigation from './src/navigation';
 import AuthContextProvider from './src/context/AuthContext';
 import Client from './src/apollo/Client';
+import { MenuProvider } from 'react-native-popup-menu';
 
 Amplify.configure(config);
 
 const App = () => {
   return (
     <SafeAreaProvider>
-      <AuthContextProvider>
-        <Client>
-        <Navigation />
-        </Client>
-      </AuthContextProvider>
+      <MenuProvider>
+        <AuthContextProvider>
+          <Client>
+          <Navigation />
+          </Client>
+        </AuthContextProvider>
+      </MenuProvider>
     </SafeAreaProvider>
   );
 };

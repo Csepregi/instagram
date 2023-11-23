@@ -11,7 +11,7 @@ import ApiErrorMessage from '../../components/ApiErrorMessage';
 
 const HomeScreen = () => {
   const [activePostId, setActivePostId] = useState<string | null>(null);
-  const {data, loading, error} = useQuery<ListPostsQuery, ListPostsQueryVariables>(listPosts);
+  const {data, loading, error, refetch} = useQuery<ListPostsQuery, ListPostsQueryVariables>(listPosts);
 
   const viewabalityConfig: ViewabilityConfig = {
     itemVisiblePercentThreshold: 51,
@@ -32,6 +32,7 @@ const HomeScreen = () => {
   }
 
   const posts = data?.listPosts?.items || [];
+  console.log('POSTS ', posts)
 
   return (
     <FlatList
@@ -43,6 +44,8 @@ const HomeScreen = () => {
       keyExtractor={item => `post-${item?.createdAt}`}
       onViewableItemsChanged={onViewableItemsChanged.current}
       viewabilityConfig={viewabalityConfig}
+      onRefresh={() => refetch()}
+      refreshing={loading}
     />
   );
 };

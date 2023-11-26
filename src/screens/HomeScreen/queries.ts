@@ -1,11 +1,22 @@
-import { gql } from "@apollo/client";
+import {gql} from '@apollo/client';
 
-export const listPosts = gql`query ListPosts(
+export const postsByDate = gql`
+  query PostsByDate(
+    $type: String!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
     $filter: ModelPostFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    postsByDate(
+      type: $type
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
       items {
         id
         description
@@ -24,7 +35,7 @@ export const listPosts = gql`query ListPosts(
           username
           image
         }
-        Comments {
+        Comments(limit: 2) {
           items {
             id
             comment
@@ -34,10 +45,12 @@ export const listPosts = gql`query ListPosts(
               username
             }
           }
+          nextToken
+          __typename
         }
       }
       nextToken
       __typename
     }
   }
-  `;
+`;

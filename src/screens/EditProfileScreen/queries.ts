@@ -1,7 +1,27 @@
-import { gql } from "@apollo/client";
+import {gql} from '@apollo/client';
 
- 
-  export const getUser = gql`query GetUser($id: ID!) {
+// export const getUser = gql`
+//   query GetUser($id: ID!) {
+//     getUser(id: $id) {
+//       id
+//       name
+//       image
+//       noPosts
+//       bio
+//       username
+//       email
+//       noFollowers
+//       noFollowings
+//       website
+//       createdAt
+//       updatedAt
+//       __typename
+//     }
+//   }
+// `;
+
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
     getUser(id: $id) {
       id
       name
@@ -13,14 +33,58 @@ import { gql } from "@apollo/client";
       noFollowers
       noFollowings
       website
+      Posts {
+        items {
+          id
+          description
+          images
+          image
+          video
+          nofComments
+          nofLikes
+          userID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      Comments {
+        items {
+          id
+          comment
+          userID
+          postID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      Likes {
+        items {
+          id
+          comment
+          userID
+          postID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
     }
   }
-  ` 
+`;
 
-  export const updateUser = gql`mutation UpdateUser(
+export const updateUser = gql`
+  mutation UpdateUser(
     $input: UpdateUserInput!
     $condition: ModelUserConditionInput
   ) {
@@ -36,9 +100,10 @@ import { gql } from "@apollo/client";
       __typename
     }
   }
-  `
+`;
 
-  export const deleteUser = gql`mutation DeleteUser(
+export const deleteUser = gql`
+  mutation DeleteUser(
     $input: DeleteUserInput!
     $condition: ModelUserConditionInput
   ) {
@@ -49,9 +114,9 @@ import { gql } from "@apollo/client";
       __typename
     }
   }
-  `
+`;
 
-  export const usersByUsername = gql`query UsersByUsername(
+export const usersByUsername = gql`query UsersByUsername(
     $username: String!
     $sortDirection: ModelSortDirection
     $filter: ModelUserFilterInput
@@ -73,4 +138,4 @@ import { gql } from "@apollo/client";
       __typename
     }
   }
-  `
+  `;

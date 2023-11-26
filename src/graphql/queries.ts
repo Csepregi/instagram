@@ -43,6 +43,8 @@ export const getLike = /* GraphQL */ `query GetLike($id: ID!) {
     }
     Post {
       id
+      createdAt
+      type
       description
       images
       image
@@ -73,7 +75,6 @@ export const getLike = /* GraphQL */ `query GetLike($id: ID!) {
         nextToken
         __typename
       }
-      createdAt
       updatedAt
       __typename
     }
@@ -111,6 +112,8 @@ export const listLikes = /* GraphQL */ `query ListLikes(
       }
       Post {
         id
+        createdAt
+        type
         description
         images
         image
@@ -118,7 +121,6 @@ export const listLikes = /* GraphQL */ `query ListLikes(
         nofComments
         nofLikes
         userID
-        createdAt
         updatedAt
         __typename
       }
@@ -167,6 +169,8 @@ export const likesByUserID = /* GraphQL */ `query LikesByUserID(
       }
       Post {
         id
+        createdAt
+        type
         description
         images
         image
@@ -174,7 +178,6 @@ export const likesByUserID = /* GraphQL */ `query LikesByUserID(
         nofComments
         nofLikes
         userID
-        createdAt
         updatedAt
         __typename
       }
@@ -190,15 +193,17 @@ export const likesByUserID = /* GraphQL */ `query LikesByUserID(
   APITypes.LikesByUserIDQueryVariables,
   APITypes.LikesByUserIDQuery
 >;
-export const likesByPostID = /* GraphQL */ `query LikesByPostID(
+export const likesForPostByUser = /* GraphQL */ `query LikesForPostByUser(
   $postID: ID!
+  $userID: ModelIDKeyConditionInput
   $sortDirection: ModelSortDirection
   $filter: ModelLikeFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  likesByPostID(
+  likesForPostByUser(
     postID: $postID
+    userID: $userID
     sortDirection: $sortDirection
     filter: $filter
     limit: $limit
@@ -226,6 +231,8 @@ export const likesByPostID = /* GraphQL */ `query LikesByPostID(
       }
       Post {
         id
+        createdAt
+        type
         description
         images
         image
@@ -233,7 +240,6 @@ export const likesByPostID = /* GraphQL */ `query LikesByPostID(
         nofComments
         nofLikes
         userID
-        createdAt
         updatedAt
         __typename
       }
@@ -246,12 +252,13 @@ export const likesByPostID = /* GraphQL */ `query LikesByPostID(
   }
 }
 ` as GeneratedQuery<
-  APITypes.LikesByPostIDQueryVariables,
-  APITypes.LikesByPostIDQuery
+  APITypes.LikesForPostByUserQueryVariables,
+  APITypes.LikesForPostByUserQuery
 >;
 export const getComment = /* GraphQL */ `query GetComment($id: ID!) {
   getComment(id: $id) {
     id
+    createdAt
     comment
     userID
     postID
@@ -284,6 +291,8 @@ export const getComment = /* GraphQL */ `query GetComment($id: ID!) {
     }
     Post {
       id
+      createdAt
+      type
       description
       images
       image
@@ -314,11 +323,9 @@ export const getComment = /* GraphQL */ `query GetComment($id: ID!) {
         nextToken
         __typename
       }
-      createdAt
       updatedAt
       __typename
     }
-    createdAt
     updatedAt
     __typename
   }
@@ -335,6 +342,7 @@ export const listComments = /* GraphQL */ `query ListComments(
   listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      createdAt
       comment
       userID
       postID
@@ -355,6 +363,8 @@ export const listComments = /* GraphQL */ `query ListComments(
       }
       Post {
         id
+        createdAt
+        type
         description
         images
         image
@@ -362,11 +372,9 @@ export const listComments = /* GraphQL */ `query ListComments(
         nofComments
         nofLikes
         userID
-        createdAt
         updatedAt
         __typename
       }
-      createdAt
       updatedAt
       __typename
     }
@@ -394,6 +402,7 @@ export const commentsByUserID = /* GraphQL */ `query CommentsByUserID(
   ) {
     items {
       id
+      createdAt
       comment
       userID
       postID
@@ -414,6 +423,8 @@ export const commentsByUserID = /* GraphQL */ `query CommentsByUserID(
       }
       Post {
         id
+        createdAt
+        type
         description
         images
         image
@@ -421,11 +432,9 @@ export const commentsByUserID = /* GraphQL */ `query CommentsByUserID(
         nofComments
         nofLikes
         userID
-        createdAt
         updatedAt
         __typename
       }
-      createdAt
       updatedAt
       __typename
     }
@@ -437,15 +446,17 @@ export const commentsByUserID = /* GraphQL */ `query CommentsByUserID(
   APITypes.CommentsByUserIDQueryVariables,
   APITypes.CommentsByUserIDQuery
 >;
-export const commentsByPostID = /* GraphQL */ `query CommentsByPostID(
+export const commentsByPost = /* GraphQL */ `query CommentsByPost(
   $postID: ID!
+  $createdAt: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
   $filter: ModelCommentFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  commentsByPostID(
+  commentsByPost(
     postID: $postID
+    createdAt: $createdAt
     sortDirection: $sortDirection
     filter: $filter
     limit: $limit
@@ -453,6 +464,7 @@ export const commentsByPostID = /* GraphQL */ `query CommentsByPostID(
   ) {
     items {
       id
+      createdAt
       comment
       userID
       postID
@@ -473,6 +485,8 @@ export const commentsByPostID = /* GraphQL */ `query CommentsByPostID(
       }
       Post {
         id
+        createdAt
+        type
         description
         images
         image
@@ -480,11 +494,9 @@ export const commentsByPostID = /* GraphQL */ `query CommentsByPostID(
         nofComments
         nofLikes
         userID
-        createdAt
         updatedAt
         __typename
       }
-      createdAt
       updatedAt
       __typename
     }
@@ -493,12 +505,14 @@ export const commentsByPostID = /* GraphQL */ `query CommentsByPostID(
   }
 }
 ` as GeneratedQuery<
-  APITypes.CommentsByPostIDQueryVariables,
-  APITypes.CommentsByPostIDQuery
+  APITypes.CommentsByPostQueryVariables,
+  APITypes.CommentsByPostQuery
 >;
 export const getPost = /* GraphQL */ `query GetPost($id: ID!) {
   getPost(id: $id) {
     id
+    createdAt
+    type
     description
     images
     image
@@ -536,10 +550,10 @@ export const getPost = /* GraphQL */ `query GetPost($id: ID!) {
     Comments {
       items {
         id
+        createdAt
         comment
         userID
         postID
-        createdAt
         updatedAt
         __typename
       }
@@ -559,7 +573,6 @@ export const getPost = /* GraphQL */ `query GetPost($id: ID!) {
       nextToken
       __typename
     }
-    createdAt
     updatedAt
     __typename
   }
@@ -573,6 +586,8 @@ export const listPosts = /* GraphQL */ `query ListPosts(
   listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      createdAt
+      type
       description
       images
       image
@@ -603,7 +618,6 @@ export const listPosts = /* GraphQL */ `query ListPosts(
         nextToken
         __typename
       }
-      createdAt
       updatedAt
       __typename
     }
@@ -612,6 +626,67 @@ export const listPosts = /* GraphQL */ `query ListPosts(
   }
 }
 ` as GeneratedQuery<APITypes.ListPostsQueryVariables, APITypes.ListPostsQuery>;
+export const postsByDate = /* GraphQL */ `query PostsByDate(
+  $type: String!
+  $createdAt: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelPostFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  postsByDate(
+    type: $type
+    createdAt: $createdAt
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      createdAt
+      type
+      description
+      images
+      image
+      video
+      nofComments
+      nofLikes
+      userID
+      User {
+        id
+        name
+        image
+        noPosts
+        bio
+        username
+        email
+        noFollowers
+        noFollowings
+        website
+        createdAt
+        updatedAt
+        __typename
+      }
+      Comments {
+        nextToken
+        __typename
+      }
+      Likes {
+        nextToken
+        __typename
+      }
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.PostsByDateQueryVariables,
+  APITypes.PostsByDateQuery
+>;
 export const postsByUserID = /* GraphQL */ `query PostsByUserID(
   $userID: ID!
   $sortDirection: ModelSortDirection
@@ -628,6 +703,8 @@ export const postsByUserID = /* GraphQL */ `query PostsByUserID(
   ) {
     items {
       id
+      createdAt
+      type
       description
       images
       image
@@ -658,7 +735,6 @@ export const postsByUserID = /* GraphQL */ `query PostsByUserID(
         nextToken
         __typename
       }
-      createdAt
       updatedAt
       __typename
     }
@@ -685,6 +761,8 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     Posts {
       items {
         id
+        createdAt
+        type
         description
         images
         image
@@ -692,7 +770,6 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
         nofComments
         nofLikes
         userID
-        createdAt
         updatedAt
         __typename
       }
@@ -702,10 +779,10 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     Comments {
       items {
         id
+        createdAt
         comment
         userID
         postID
-        createdAt
         updatedAt
         __typename
       }

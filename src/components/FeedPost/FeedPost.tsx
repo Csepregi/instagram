@@ -1,6 +1,5 @@
 import {useState} from 'react';
 import {View, Image, Text, Pressable} from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -13,9 +12,21 @@ import Comment from '../Comment/Comment';
 import DoublePressable from '../DoublePressable';
 import Carousel from '../Carousel';
 import VideoPlayer from '../VideoPlayer';
-import { Post } from '../../API';
-import { DEFAULT_USER_IMAGE } from '../../config';
+import {
+  CreateLikeMutation,
+  CreateLikeMutationVariables,
+  DeleteLikeMutation,
+  DeleteLikeMutationVariables,
+  LikesForPostByUserQuery,
+  LikesForPostByUserQueryVariables,
+  Post,
+} from '../../API';
+import {DEFAULT_USER_IMAGE} from '../../config';
 import PostMenu from './PostMenu';
+import {useMutation, useQuery} from '@apollo/client';
+import {createLike, likesForPostByUser, deleteLike} from './queries';
+import {useAuthContext} from '../../context/AuthContext';
+import dayjs from 'dayjs';
 
 interface IFeedPost {
   post: Post;
@@ -23,16 +34,47 @@ interface IFeedPost {
 }
 
 const FeedPost = ({post, isVisible}: IFeedPost) => {
+  const {userId} = useAuthContext();
   const navigation = useNavigation<FeedNavigationProp>();
   const [isDescriptionExpended, setIsDescriptionExpended] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
+
+  const [doCreateLike] = useMutation<
+    CreateLikeMutation,
+    CreateLikeMutationVariables
+  >(createLike, {
+    variables: {
+      input: {
+        userID: userId,
+        postID: post.id,
+        comment: '',
+      },
+    },
+    refetchQueries: ['LikesForPostByUser'],
+  });
+
+  const [doDeleteLike] = useMutation<
+    DeleteLikeMutation,
+    DeleteLikeMutationVariables
+  >(deleteLike);
+
+  const {data: usersLikeData} = useQuery<
+    LikesForPostByUserQuery,
+    LikesForPostByUserQueryVariables
+  >(likesForPostByUser, {variables: {postID: post.id, userID: {eq: userId}}});
+
+  const userLike = usersLikeData?.likesForPostByUser?.items?.[0];
 
   const toggleDescriptionExpended = () => {
     setIsDescriptionExpended(v => !v);
   };
 
-  const toggleLike = () => {
-    setIsLiked(v => !v);
+  const toggleLike = async () => {
+    if (userLike) {
+      //delete user like
+      await doDeleteLike({variables: {input: {id: userLike.id}}});
+    } else {
+      doCreateLike();
+    }
   };
 
   let content = null;
@@ -67,6 +109,10 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
     navigation.navigate('Comments', {postId: post.id});
   };
 
+  const navigateToLikes = () => {
+    navigation.navigate('PostLikes', {id: post.id});
+  };
+
   return (
     <View style={styles.post}>
       {/* Hedaer */}
@@ -77,9 +123,10 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
           }}
           style={styles.userAvatar}
         />
-        <Text style={styles.userName} onPress={navigateToUser}>{post.User?.username}</Text>
-        <PostMenu post={post}/>
-        
+        <Text style={styles.userName} onPress={navigateToUser}>
+          {post.User?.username}
+        </Text>
+        <PostMenu post={post} />
       </View>
       {/* Content */}
       {content}
@@ -88,10 +135,10 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
         <View style={styles.iconContainer}>
           <Pressable onPress={toggleLike}>
             <AntDesign
-              name={isLiked ? 'heart' : 'hearto'}
+              name={userLike ? 'heart' : 'hearto'}
               size={24}
               style={styles.icon}
-              color={isLiked ? colors.accent : colors.black}
+              color={userLike ? colors.accent : colors.black}
             />
           </Pressable>
           <Ionicons
@@ -113,7 +160,7 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
             color={colors.black}
           />
         </View>
-        <Text style={styles.text}>
+        <Text style={styles.text} onPress={navigateToLikes}>
           Liked by <Text style={styles.bold}>vicius44 </Text> and{' '}
           <Text style={styles.bold}>{post.nofLikes} others</Text>
         </Text>
@@ -127,12 +174,14 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
           {isDescriptionExpended ? 'less' : 'more'}
         </Text>
         {/* Comments */}
-        <Text onPress={navigateToComments}>View all {post.nofComments} comments</Text> 
-        {(post.Comments?.items || [])?.map(comment => (
-          comment && <Comment key={comment.id} comment={comment} />
-        ))}
+        <Text onPress={navigateToComments}>
+          View all {post.nofComments} comments
+        </Text>
+        {(post.Comments?.items || [])?.map(
+          comment => comment && <Comment key={comment.id} comment={comment} />,
+        )}
         {/* Posted Date */}
-        <Text>{post.createdAt}</Text>
+        <Text>{dayjs(post.createdAt).fromNow()}</Text>
       </View>
     </View>
   );

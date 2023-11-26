@@ -34,18 +34,19 @@ export type UplaodStackNavigatorParamList = {
 export type CameraNavigationProp = NativeStackNavigationProp<
   UplaodStackNavigatorParamList,
   'Camera'
-  >;
+>;
 
 export type CreateNavigationProp = NativeStackNavigationProp<
   UplaodStackNavigatorParamList,
   'Create'
-  >;
+>;
 
 export type CreateRouteProp = RouteProp<
   UplaodStackNavigatorParamList,
   'Create'
 >;
 
+export type CommentsRouteProp = RouteProp<RootNavigator, 'Comments'>;
 
 export type MyProfileNavigationProp = BottomTabNavigationProp<
   BottomTabNavigatorParamList,
@@ -60,13 +61,19 @@ export type MyProfileRouteProp = RouteProp<
 export type HomeStackNavigatorParamList = {
   Feed: undefined;
   UserProfile: {userId: string};
-  UpdatePost: {id: string}
+  UpdatePost: {id: string};
+  PostLikes: {id: string};
 };
 
+export type PostLikesRouteProp = RouteProp<
+  HomeStackNavigatorParamList,
+  'PostLikes'
+>;
+
 export type UpdatePostRouteProp = RouteProp<
-  HomeStackNavigatorParamList, 
+  HomeStackNavigatorParamList,
   'UpdatePost'
-  >;
+>;
 
 export type UserProfileNavigationProp = NativeStackNavigationProp<
   HomeStackNavigatorParamList,

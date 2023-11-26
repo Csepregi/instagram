@@ -5,10 +5,10 @@ import BottomTabNavigator from './BottomTabNavigator';
 import CommentsScreen from '../screens/CommentsScreen';
 import {RootNavigator} from '../types/navigation';
 import AuthStackNavigator from './AuthStackNavigator';
-import { useAuthContext } from '../context/AuthContext';
-import { useQuery } from '@apollo/client';
-import { GetUserQuery, GetUserQueryVariables } from '../API';
-import { getUser } from './queries';
+import {useAuthContext} from '../context/AuthContext';
+import {useQuery} from '@apollo/client';
+import {GetUserQuery, GetUserQueryVariables} from '../API';
+import {getUser} from './queries';
 import EditProfileScreen from '../screens/EditProfileScreen';
 
 const Stack = createNativeStackNavigator<RootNavigator>();
@@ -35,17 +35,20 @@ const linking: LinkingOptions<RootNavigator> = {
 };
 
 const Navigation = () => {
-  const {user, userId} = useAuthContext()
-  const {data, loading, error} = useQuery<GetUserQuery, GetUserQueryVariables>(getUser, {variables: {id: userId}});
-  console.log('DATA NAVIGATION, ', data)
-  const userData = data?.getUser
-  console.log('DATA userData, ', userData)
+  const {user, userId} = useAuthContext();
+  const {data, loading, error} = useQuery<GetUserQuery, GetUserQueryVariables>(
+    getUser,
+    {variables: {id: userId}},
+  );
+  console.log('DATA NAVIGATION, ', data);
+  const userData = data?.getUser;
+  console.log('DATA userData, ', userData);
   if (user === undefined || loading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator />
       </View>
-    )
+    );
   }
 
   let stackScreens = null;
@@ -55,10 +58,9 @@ const Navigation = () => {
         name="Auth"
         component={AuthStackNavigator}
         options={{headerShown: false}}
-    />
+      />
     );
-  }
-  else if (!userData?.username) {
+  } else if (!userData?.username) {
     stackScreens = (
       <Stack.Screen
         name="EditProfile"
@@ -66,24 +68,24 @@ const Navigation = () => {
         options={{title: 'Setup Profile'}}
       />
     );
-  }
-    else {
-      stackScreens = (
-        <>
+  } else {
+    stackScreens = (
+      <>
         <Stack.Screen
-            name="Home"
-            component={BottomTabNavigator}
-            options={{ headerShown: false }} />
+          name="Home"
+          component={BottomTabNavigator}
+          options={{headerShown: false}}
+        />
         <Stack.Screen name="Comments" component={CommentsScreen} />
       </>
-      );
-    }
+    );
+  }
 
   return (
     <View style={styles.app}>
       <NavigationContainer linking={linking}>
         <Stack.Navigator screenOptions={{headerShown: true}}>
-         {stackScreens}
+          {stackScreens}
         </Stack.Navigator>
       </NavigationContainer>
     </View>

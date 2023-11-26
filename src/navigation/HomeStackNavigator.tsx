@@ -5,13 +5,18 @@ import {Image} from 'react-native';
 import logo from '../assets/images/logo.png';
 import {RootNavigator} from '../types/navigation';
 import UpdatePostScreen from '../screens/UpdatePostScreen';
+import PostLikesScreen from '../screens/PostLikesScreen';
 
 const Stack = createNativeStackNavigator<RootNavigator>();
 
 const HomeStackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Feed" component={HomeScreen} options={{headerTitle: HeaderTitle, headerTitleAlign: 'center'}} />
+      <Stack.Screen
+        name="Feed"
+        component={HomeScreen}
+        options={{headerTitle: HeaderTitle, headerTitleAlign: 'center'}}
+      />
       <Stack.Screen
         name="UserProfile"
         component={ProfileScreen}
@@ -21,6 +26,11 @@ const HomeStackNavigator = () => {
         name="UpdatePost"
         component={UpdatePostScreen}
         options={{title: 'Update Post'}}
+      />
+      <Stack.Screen
+        name="PostLikes"
+        component={PostLikesScreen}
+        options={{title: 'Post Likes'}}
       />
     </Stack.Navigator>
   );

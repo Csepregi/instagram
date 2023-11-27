@@ -64,3 +64,30 @@ export const commentsByPost = gql`
     }
   }
 `;
+
+export const onCreateCommentByPostId = gql`
+  subscription onCreateCommentByPostId($postID: ID!) {
+    onCreateCommentByPostId(postID: $postID) {
+      id
+      comment
+      userID
+      postID
+      Post {
+        id
+        nofComments
+        createdAt
+        updatedAt
+        __typename
+      }
+      User {
+        id
+        image
+        username
+        name
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;

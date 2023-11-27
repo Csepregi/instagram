@@ -21,7 +21,7 @@ const useCommentsService = (postId: string) => {
   const [doCreateComment] = useMutation<
     CreateCommentMutation,
     CreateCommentMutationVariables
-  >(createComment, {refetchQueries: ['CommentsByPost']});
+  >(createComment);
 
   const [doUpdatePost] = useMutation<
     UpdatePostMutation,

@@ -8,6 +8,85 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateCommentByPostId = /* GraphQL */ `subscription OnCreateCommentByPostId($postID: ID!) {
+  onCreateCommentByPostId(postID: $postID) {
+    id
+    createdAt
+    comment
+    userID
+    postID
+    User {
+      id
+      name
+      image
+      noPosts
+      bio
+      username
+      email
+      noFollowers
+      noFollowings
+      website
+      Posts {
+        nextToken
+        __typename
+      }
+      Comments {
+        nextToken
+        __typename
+      }
+      Likes {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    Post {
+      id
+      createdAt
+      type
+      description
+      images
+      image
+      video
+      nofComments
+      nofLikes
+      userID
+      User {
+        id
+        name
+        image
+        noPosts
+        bio
+        username
+        email
+        noFollowers
+        noFollowings
+        website
+        createdAt
+        updatedAt
+        __typename
+      }
+      Comments {
+        nextToken
+        __typename
+      }
+      Likes {
+        nextToken
+        __typename
+      }
+      updatedAt
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateCommentByPostIdSubscriptionVariables,
+  APITypes.OnCreateCommentByPostIdSubscription
+>;
 export const onCreateLike = /* GraphQL */ `subscription OnCreateLike($filter: ModelSubscriptionLikeFilterInput) {
   onCreateLike(filter: $filter) {
     id

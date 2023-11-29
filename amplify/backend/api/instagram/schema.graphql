@@ -1,4 +1,4 @@
-type Like @model @auth(rules: [{allow: public}]) {
+type Like @model @auth(rules: [{allow: private, operations: [read]}, {allow: owner}]) {
   id: ID!
   comment: String!
   userID: ID! @index(name: "byUser")
@@ -7,7 +7,7 @@ type Like @model @auth(rules: [{allow: public}]) {
   Post: Post @belongsTo(fields: ["postID"])
 }
 
-type Comment @model @auth(rules: [{allow: public}]) {
+type Comment @model @auth(rules: [{allow: private, operations: [read]}, {allow: owner}]) {
   id: ID!
   createdAt: AWSDateTime!
   comment: String!
@@ -17,7 +17,7 @@ type Comment @model @auth(rules: [{allow: public}]) {
   Post: Post @belongsTo(fields: ["postID"])
 }
 
-type Post @model @auth(rules: [{allow: public}]) {
+type Post @model @auth(rules: [{allow: private, operations: [read]}, {allow: owner}]) {
   id: ID!
   createdAt: AWSDateTime!
   type: String! @index(name: "postsByDate", queryField: "postsByDate", sortKeyFields: ["createdAt"])
@@ -33,14 +33,14 @@ type Post @model @auth(rules: [{allow: public}]) {
   Likes: [Like] @hasMany(indexName: "byUser", fields: ["id"])
 }
 
-type User @model @auth(rules: [{allow: public}]) {
+type User @model @auth(rules: [{allow: private, operations: [read]}, {allow: owner}]) {
   id: ID!
   name: String!
   image: String
   noPosts: Int!
   bio: String
   username: String @index(name: "usersByUsername", queryField: "usersByUsername")
-  email: String!
+  email: String @auth(rules: [{allow: owner}])
   noFollowers: Int!
   noFollowings: Int!
   website: AWSURL

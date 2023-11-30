@@ -1,6 +1,6 @@
 import {FlatList} from 'react-native';
 import FeedGridItem from './FeedGridItem';
-import { Post } from '../../API';
+import {Post} from '../../API';
 
 interface IFeedGirdView {
   data: (Post | null)[];
@@ -13,7 +13,12 @@ interface IFeedGirdView {
   loading: boolean;
 }
 
-const FeedGridView = ({data, ListHeaderComponent, refetch, loading}: IFeedGirdView) => {
+const FeedGridView = ({
+  data,
+  ListHeaderComponent,
+  refetch,
+  loading,
+}: IFeedGirdView) => {
   return (
     <FlatList
       data={data}

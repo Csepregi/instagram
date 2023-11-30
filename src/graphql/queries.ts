@@ -39,6 +39,7 @@ export const getLike = /* GraphQL */ `query GetLike($id: ID!) {
       }
       createdAt
       updatedAt
+      owner
       __typename
     }
     Post {
@@ -65,6 +66,7 @@ export const getLike = /* GraphQL */ `query GetLike($id: ID!) {
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Comments {
@@ -76,10 +78,12 @@ export const getLike = /* GraphQL */ `query GetLike($id: ID!) {
         __typename
       }
       updatedAt
+      owner
       __typename
     }
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -108,6 +112,7 @@ export const listLikes = /* GraphQL */ `query ListLikes(
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Post {
@@ -122,10 +127,12 @@ export const listLikes = /* GraphQL */ `query ListLikes(
         nofLikes
         userID
         updatedAt
+        owner
         __typename
       }
       createdAt
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -165,6 +172,7 @@ export const likesByUserID = /* GraphQL */ `query LikesByUserID(
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Post {
@@ -179,10 +187,12 @@ export const likesByUserID = /* GraphQL */ `query LikesByUserID(
         nofLikes
         userID
         updatedAt
+        owner
         __typename
       }
       createdAt
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -227,6 +237,7 @@ export const likesForPostByUser = /* GraphQL */ `query LikesForPostByUser(
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Post {
@@ -241,10 +252,12 @@ export const likesForPostByUser = /* GraphQL */ `query LikesForPostByUser(
         nofLikes
         userID
         updatedAt
+        owner
         __typename
       }
       createdAt
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -287,6 +300,7 @@ export const getComment = /* GraphQL */ `query GetComment($id: ID!) {
       }
       createdAt
       updatedAt
+      owner
       __typename
     }
     Post {
@@ -313,6 +327,7 @@ export const getComment = /* GraphQL */ `query GetComment($id: ID!) {
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Comments {
@@ -324,9 +339,11 @@ export const getComment = /* GraphQL */ `query GetComment($id: ID!) {
         __typename
       }
       updatedAt
+      owner
       __typename
     }
     updatedAt
+    owner
     __typename
   }
 }
@@ -359,6 +376,7 @@ export const listComments = /* GraphQL */ `query ListComments(
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Post {
@@ -373,9 +391,11 @@ export const listComments = /* GraphQL */ `query ListComments(
         nofLikes
         userID
         updatedAt
+        owner
         __typename
       }
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -419,6 +439,7 @@ export const commentsByUserID = /* GraphQL */ `query CommentsByUserID(
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Post {
@@ -433,9 +454,11 @@ export const commentsByUserID = /* GraphQL */ `query CommentsByUserID(
         nofLikes
         userID
         updatedAt
+        owner
         __typename
       }
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -481,6 +504,7 @@ export const commentsByPost = /* GraphQL */ `query CommentsByPost(
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Post {
@@ -495,9 +519,11 @@ export const commentsByPost = /* GraphQL */ `query CommentsByPost(
         nofLikes
         userID
         updatedAt
+        owner
         __typename
       }
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -545,6 +571,7 @@ export const getPost = /* GraphQL */ `query GetPost($id: ID!) {
       }
       createdAt
       updatedAt
+      owner
       __typename
     }
     Comments {
@@ -555,6 +582,7 @@ export const getPost = /* GraphQL */ `query GetPost($id: ID!) {
         userID
         postID
         updatedAt
+        owner
         __typename
       }
       nextToken
@@ -568,12 +596,14 @@ export const getPost = /* GraphQL */ `query GetPost($id: ID!) {
         postID
         createdAt
         updatedAt
+        owner
         __typename
       }
       nextToken
       __typename
     }
     updatedAt
+    owner
     __typename
   }
 }
@@ -608,6 +638,7 @@ export const listPosts = /* GraphQL */ `query ListPosts(
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Comments {
@@ -619,6 +650,7 @@ export const listPosts = /* GraphQL */ `query ListPosts(
         __typename
       }
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -666,6 +698,7 @@ export const postsByDate = /* GraphQL */ `query PostsByDate(
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Comments {
@@ -677,6 +710,7 @@ export const postsByDate = /* GraphQL */ `query PostsByDate(
         __typename
       }
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -725,6 +759,7 @@ export const postsByUserID = /* GraphQL */ `query PostsByUserID(
         website
         createdAt
         updatedAt
+        owner
         __typename
       }
       Comments {
@@ -736,6 +771,7 @@ export const postsByUserID = /* GraphQL */ `query PostsByUserID(
         __typename
       }
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -771,6 +807,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
         nofLikes
         userID
         updatedAt
+        owner
         __typename
       }
       nextToken
@@ -784,6 +821,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
         userID
         postID
         updatedAt
+        owner
         __typename
       }
       nextToken
@@ -797,6 +835,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
         postID
         createdAt
         updatedAt
+        owner
         __typename
       }
       nextToken
@@ -804,6 +843,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     }
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -839,6 +879,7 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       }
       createdAt
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -885,6 +926,7 @@ export const usersByUsername = /* GraphQL */ `query UsersByUsername(
       }
       createdAt
       updatedAt
+      owner
       __typename
     }
     nextToken

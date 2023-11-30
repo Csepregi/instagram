@@ -18,7 +18,7 @@ const HomeScreen = () => {
     PostsByDateQuery,
     PostsByDateQueryVariables
   >(postsByDate, {
-    variables: {type: 'POST', sortDirection: ModelSortDirection.DESC, limit: 1},
+    variables: {type: 'POST', sortDirection: ModelSortDirection.DESC, limit: 2},
   });
 
   const nextToken = data?.postsByDate?.nextToken;

@@ -1,13 +1,15 @@
-import {Image, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import styles from './styles';
-import user from '../../assets/data/user.json';
 import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import {ProfileNavigationProp} from '../../types/navigation';
-import {useAuthenticator, withAuthenticator} from '@aws-amplify/ui-react-native';
-import { User } from '../../API';
-import { DEFAULT_USER_IMAGE } from '../../config';
-import { useAuthContext } from '../../context/AuthContext';
+import {
+  useAuthenticator,
+  withAuthenticator,
+} from '@aws-amplify/ui-react-native';
+import {User} from '../../API';
+import {useAuthContext} from '../../context/AuthContext';
+import UserImage from '../../components/UserImage';
 
 interface IProfileHeader {
   user: User;
@@ -17,13 +19,13 @@ const ProfileHeader = ({user}: IProfileHeader) => {
   const {userId} = useAuthContext();
   const navigation = useNavigation<ProfileNavigationProp>();
   const {signOut} = useAuthenticator();
-  navigation.setOptions({title: user?.username || 'Profile'})
-  
+  navigation.setOptions({title: user?.username || 'Profile'});
+
   return (
     <View style={styles.root}>
       <View style={styles.headerRow}>
         {/* Profile image */}
-        <Image source={{uri: user.image || DEFAULT_USER_IMAGE}} style={styles.avatar} />
+        <UserImage imageKey={user.image} width={100} />
         {/* Posts, followers, following number */}
         <View style={styles.numberContainer}>
           <Text style={styles.numberText}>{user.noPosts}</Text>
@@ -41,18 +43,19 @@ const ProfileHeader = ({user}: IProfileHeader) => {
 
       <Text style={styles.name}>{user.name}</Text>
       <Text>{user.bio}</Text>
+      {console.log('userId ', userId)}
+      {console.log('user.id ', user.id)}
       {userId === user.id && (
         <View style={{flexDirection: 'row'}}>
-        <Button
-          text={'Edit Profile'}
-          onPress={() => navigation.navigate('Edit Profile')}
-          inline
-        />
-        <Button text={'SignOut'} onPress={signOut} inline />
-        {/* or topToTop */}
-      </View>
+          <Button
+            text={'Edit Profile'}
+            onPress={() => navigation.navigate('Edit Profile')}
+            inline
+          />
+          <Button text={'SignOut'} onPress={signOut} inline />
+          {/* or topToTop */}
+        </View>
       )}
-      
     </View>
   );
 };

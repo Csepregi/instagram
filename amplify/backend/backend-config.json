@@ -106,6 +106,30 @@
           "resourceName": "instagramPostConfirmation"
         }
       ]
+    },
+    "AMPLIFY_storage_instagram9a4b9aa0_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "instagram9a4b9aa0"
+        }
+      ]
+    },
+    "AMPLIFY_storage_instagram9a4b9aa0_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "instagram9a4b9aa0"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "instagram9a4b9aa0": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3",
+      "serviceType": "imported"
     }
   }
 }

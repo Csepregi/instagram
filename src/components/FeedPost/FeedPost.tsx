@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {View, Image, Text, Pressable} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,9 +9,6 @@ import React from 'react';
 import colors from '../../theme/colors';
 import styles from './style';
 import Comment from '../Comment/Comment';
-import DoublePressable from '../DoublePressable';
-import Carousel from '../Carousel';
-import VideoPlayer from '../VideoPlayer';
 import {
   CreateLikeMutation,
   CreateLikeMutationVariables,
@@ -21,12 +18,13 @@ import {
   LikesForPostByUserQueryVariables,
   Post,
 } from '../../API';
-import {DEFAULT_USER_IMAGE} from '../../config';
 import PostMenu from './PostMenu';
 import {useMutation, useQuery} from '@apollo/client';
 import {createLike, likesForPostByUser, deleteLike} from './queries';
 import {useAuthContext} from '../../context/AuthContext';
 import dayjs from 'dayjs';
+import Content from './Content';
+import UserImage from '../UserImage';
 
 interface IFeedPost {
   post: Post;
@@ -77,28 +75,6 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
     }
   };
 
-  let content = null;
-  if (post.image) {
-    content = (
-      <DoublePressable onDoublePress={toggleLike}>
-        <Image
-          source={{
-            uri: post?.image || DEFAULT_USER_IMAGE,
-          }}
-          style={styles.image}
-        />
-      </DoublePressable>
-    );
-  } else if (post.images) {
-    content = <Carousel images={post.images} onDoublePress={toggleLike} />;
-  } else if (post.video) {
-    content = (
-      <DoublePressable onDoublePress={toggleLike}>
-        <VideoPlayer uri={post.video} paused={!isVisible} />
-      </DoublePressable>
-    );
-  }
-
   const navigateToUser = () => {
     if (post.User) {
       navigation.navigate('UserProfile', {userId: post.User?.id});
@@ -117,19 +93,14 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
     <View style={styles.post}>
       {/* Hedaer */}
       <View style={styles.header}>
-        <Image
-          source={{
-            uri: post.User?.image || DEFAULT_USER_IMAGE,
-          }}
-          style={styles.userAvatar}
-        />
+        <UserImage imageKey={post?.User?.image} />
         <Text style={styles.userName} onPress={navigateToUser}>
           {post.User?.username}
         </Text>
         <PostMenu post={post} />
       </View>
       {/* Content */}
-      {content}
+      <Content post={post} isVisible={isVisible} toggleLike={toggleLike} />
       {/* Footer */}
       <View style={styles.footer}>
         <View style={styles.iconContainer}>

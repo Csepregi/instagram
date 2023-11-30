@@ -1,7 +1,7 @@
-import {View, Image, Text} from 'react-native';
+import {View, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import colors from '../../theme/colors';
-import { Post } from '../../API';
+import {Post} from '../../API';
 
 export default function FeedGridItem({post}: {post: Post}) {
   return (

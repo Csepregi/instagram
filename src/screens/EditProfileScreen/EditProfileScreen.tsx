@@ -1,5 +1,5 @@
 import {View, Text, Image, ActivityIndicator, Alert} from 'react-native';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {
   Asset,
@@ -11,6 +11,7 @@ import {
   DeleteUserMutationVariables,
   GetUserQuery,
   GetUserQueryVariables,
+  UpdateUserInput,
   UpdateUserMutation,
   UpdateUserMutationVariables,
   User,
@@ -22,10 +23,11 @@ import {useMutation, useQuery, useLazyQuery} from '@apollo/client';
 import {useAuthContext} from '../../context/AuthContext';
 import ApiErrorMessage from '../../components/ApiErrorMessage';
 import {useNavigation} from '@react-navigation/native';
-import {Auth} from 'aws-amplify';
+import {Auth, Storage} from 'aws-amplify';
 import {styles} from './styles';
 import CustomInput, {IEditableUser} from './CustomInput';
 import {DEFAULT_USER_IMAGE} from '../../config';
+import {v4 as uuidV4} from 'uuid';
 
 const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
@@ -49,7 +51,7 @@ const EditProfileScreen = () => {
   >(usersByUsername);
 
   const [doUpdateUser, {loading: updateLoading, error: updateError}] =
-    useMutation<UpdateUserMutation, UpdateUserMutationVariables>(updateUser);;
+    useMutation<UpdateUserMutation, UpdateUserMutationVariables>(updateUser);
   const [doDelete, {loading: deleteLoading, error: deleteError}] = useMutation<
     DeleteUserMutation,
     DeleteUserMutationVariables
@@ -58,9 +60,30 @@ const EditProfileScreen = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<null | Asset>(null);
 
   const onSubmit = async (formData: IEditableUser) => {
-    await doUpdateUser({variables: {input: {id: userId, ...formData}}});
+    const input: UpdateUserInput = {id: userId, ...formData};
+    if (selectedPhoto?.uri) {
+      input.image = await uploadMedia(selectedPhoto.uri);
+    }
+    await doUpdateUser({variables: {input}});
     if (navigation.canGoBack()) {
       navigation.goBack();
+    }
+  };
+
+  const uploadMedia = async (uri: string) => {
+    try {
+      // get the blob of the file from uri
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      // upload the file (blob) to s3
+      console.log('blob ', blob);
+      const urlParts = uri.split('.');
+      const extension = urlParts[urlParts.length - 1];
+      const s3Response = await Storage.put(`${uuidV4()}.${extension}`, blob);
+      return s3Response.key;
+    } catch (error) {
+      console.log('Errror ', error);
+      Alert.alert('Error uploading the the photo');
     }
   };
 
@@ -94,7 +117,7 @@ const EditProfileScreen = () => {
     });
   };
 
-const onChangePhoto = () => {
+  const onChangePhoto = () => {
     launchImageLibrary(
       {mediaType: 'photo'},
       ({didCancel, errorCode, assets}) => {
@@ -166,7 +189,7 @@ const onChangePhoto = () => {
         name="username"
         control={control}
         rules={{
-          validate: validateUserName, 
+          validate: validateUserName,
         }}
         label="Username"
       />

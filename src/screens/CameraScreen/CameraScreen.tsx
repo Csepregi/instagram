@@ -14,8 +14,10 @@ import React, {useCallback, useEffect, useState, useRef, useMemo} from 'react';
 import {SCREEN_HEIGHT, SCREEN_WIDTH, MAX_ZOOM_FACTOR} from '../../constants';
 import colors from '../../theme/colors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
-import { CameraNavigationProp } from '../../types/navigation';
+import {useNavigation} from '@react-navigation/native';
+import {CameraNavigationProp} from '../../types/navigation';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const CameraScreen = () => {
   // const devices = Camera.getAvailableCameraDevices();
@@ -25,9 +27,11 @@ const CameraScreen = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   //const [cameraType, setCameraType] = useState(Camera.Con);
   const [loading, setLoading] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
   const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>(
     'back',
   );
+  const inset = useSafeAreaInsets();
   //let value = false;
   //const isPressingButton = useSharedValue<boolean | undefined>(value);
 
@@ -70,15 +74,6 @@ const CameraScreen = () => {
   const minZoom = device?.minZoom ?? 1;
   const maxZoom = Math.min(device?.maxZoom ?? 1, MAX_ZOOM_FACTOR);
 
-  const navigateToCreateScreen = () => {
-    navigation.navigate('Create', {
-      images: [
-        'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/images/4.jpg',
-        'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/images/2.jpg'
-      ],
-    });
-  }
-
   // const cameraAnimatedProps = useAnimatedProps(() => {
   //   const z = Math.max(Math.min(zoom.value, maxZoom), minZoom);
   //   return {
@@ -104,6 +99,9 @@ const CameraScreen = () => {
       }
       const photo = await camera.current.takePhoto(takePhotoOptions);
       console.log('Taking photo...', photo);
+      navigation.navigate('Create', {
+        image: photo.path,
+      });
       // onMediaCaptured(photo, 'photo')
     } catch (e) {
       console.error('Failed to take photo!', e);
@@ -132,6 +130,27 @@ const CameraScreen = () => {
   //   getPermission();
   // }, []);
 
+  const openImageGallery = () => {
+    launchImageLibrary(
+      {mediaType: 'mixed', selectionLimit: 3},
+      ({didCancel, errorCode, assets}) => {
+        if (!didCancel && !errorCode && assets && assets.length > 0) {
+          const params: {image?: string; images?: string[]; video?: string} =
+            {};
+          if (assets.length === 1) {
+            const field = assets[0].type?.startsWith('video')
+              ? 'video'
+              : 'image';
+            params[field] = assets[0].uri;
+          } else if (assets.length > 1) {
+            params.images = assets?.map(asset => asset.uri) as string[];
+          }
+          navigation.navigate('Create', params);
+        }
+      },
+    );
+  };
+
   // if (hasPermission === null) {
   //   return <Text>Loading...</Text>;
   // }
@@ -153,7 +172,7 @@ const CameraScreen = () => {
         //setIsPressingButton={setIsPressingButton}
         //animatedProps={cameraAnimatedProps}
       />
-      <View style={[styles.buttonContainer, {top: 10}]}>
+      <View style={[styles.buttonContainer, {top: inset.top + 25}]}>
         <MaterialIcons name="close" size={30} color={colors.white} />
         <Pressable onPress={onFlashPressed}>
           <MaterialIcons
@@ -165,20 +184,15 @@ const CameraScreen = () => {
         <MaterialIcons name="settings" size={30} color={colors.white} />
       </View>
       <View style={[styles.buttonContainer, {bottom: 25}]}>
-        <MaterialIcons name="photo-library" size={30} color={colors.white} />
+        <Pressable onPress={openImageGallery}>
+          <MaterialIcons name="photo-library" size={30} color={colors.white} />
+        </Pressable>
         <Pressable onPress={takePicture}>
           <View style={styles.circle} />
         </Pressable>
         <Pressable onPress={onChangeCamera}>
           <MaterialIcons
             name="flip-camera-ios"
-            size={30}
-            color={colors.white}
-          />
-        </Pressable>
-        <Pressable onPress={navigateToCreateScreen}>
-          <MaterialIcons
-            name="arrow-forward-ios"
             size={30}
             color={colors.white}
           />

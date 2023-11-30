@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import {Amplify} from 'aws-amplify';
 import {withAuthenticator} from '@aws-amplify/ui-react-native';
 import config from './src/aws-exports';

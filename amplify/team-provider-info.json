@@ -19,11 +19,17 @@
       "function": {
         "instagramPostConfirmation": {
           "deploymentBucketName": "amplify-instagram-staging-132211-deployment",
-          "s3Key": "amplify-builds/instagramPostConfirmation-637a6e3947454b6a7831-build.zip"
+          "s3Key": "amplify-builds/instagramPostConfirmation-7a454668504246554255-build.zip"
         }
       },
       "api": {
         "instagram": {}
+      },
+      "storage": {
+        "instagram9a4b9aa0": {
+          "bucketName": "csepregis-gallery",
+          "region": "eu-central-1"
+        }
       }
     }
   }

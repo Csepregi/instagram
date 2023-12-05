@@ -1,5 +1,5 @@
-import {useEffect, useState} from 'react';
-import {View, Image, Text, Pressable} from 'react-native';
+import {useState} from 'react';
+import {View, Text, Pressable} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';

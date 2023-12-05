@@ -1,6 +1,7 @@
-import { gql } from "@apollo/client";
+import {gql} from '@apollo/client';
 
-export const listUsers = gql`query ListUsers(
+export const listUsers = gql`
+  query ListUsers(
     $filter: ModelUserFilterInput
     $limit: Int
     $nextToken: String
@@ -19,4 +20,4 @@ export const listUsers = gql`query ListUsers(
       __typename
     }
   }
-  `
+`;

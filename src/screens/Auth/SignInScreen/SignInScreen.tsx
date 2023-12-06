@@ -13,8 +13,8 @@ import SocialSignInButtons from '../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import {SignInNavigationProp} from '../../../types/navigation';
-import { Auth } from 'aws-amplify';
-import { useState } from 'react';
+import {Auth} from 'aws-amplify';
+import {useState} from 'react';
 
 type SignInData = {
   username: string;
@@ -29,23 +29,23 @@ const SignInScreen = () => {
   const [loading, setLoading] = useState(false);
 
   const onSignInPressed = async ({username, password}: SignInData) => {
-    if(loading) {
-      return
+    if (loading) {
+      return;
     }
     setLoading(true);
     // validate user
     try {
       await Auth.signIn(username, password);
     } catch (error) {
-      if((error as Error).message === 'UserNotConfirmedException') {
-        navigation.navigate('Confirm email', {username})
+      if ((error as Error).message === 'UserNotConfirmedException') {
+        navigation.navigate('Confirm email', {username});
       }
       Alert.alert('OOPS', (error as Error).message);
     } finally {
       setLoading(false);
-      reset()
+      reset();
     }
-   
+
     // navigation.navigate('Home');
   };
 

@@ -51,8 +51,7 @@ const saveUser = async user => {
 
 exports.handler = async (event, context) => {
   // insert code to be executed by your lambda trigger
-  console.log('hey lambda function working');
-  console.log(event);
+  console.log('hey lambda function working and updteded');
   if (!event?.request?.userAttributes) {
     console.log('No user data available');
     return;

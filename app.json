@@ -1,4 +1,11 @@
 {
-  "name": "csepregis photos",
-  "displayName": "csepregis photos"
+  "name": "csepregisphotos",
+  "displayName": "csepregisphotos",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "661e21d7-1bd8-4b34-9edf-c6cec0b20235"
+      }
+    }
+  }
 }

@@ -36,6 +36,7 @@
 			</dict>
 		</dict>
 		<key>NSCameraUsageDescription</key>
+		<string>$(PRODUCT_NAME) uses photos</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Allow $(PRODUCT_NAME) to use the camera</string>
 		<key>NSMicrophoneUsageDescription</key>

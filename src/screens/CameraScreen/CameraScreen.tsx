@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, Linking, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Linking,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 import {
   Camera,
   CameraDevice,
@@ -8,25 +15,32 @@ import {
   useCameraPermission,
   useMicrophonePermission,
   useCameraFormat,
+  PhotoFile,
+  VideoFile,
 } from 'react-native-vision-camera';
 import {useSharedValue} from 'react-native-reanimated';
 import React, {useCallback, useEffect, useState, useRef, useMemo} from 'react';
 import {SCREEN_HEIGHT, SCREEN_WIDTH, MAX_ZOOM_FACTOR} from '../../constants';
 import colors from '../../theme/colors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {CameraNavigationProp} from '../../types/navigation';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const CameraScreen = () => {
-  // const devices = Camera.getAvailableCameraDevices();
-  // const device = devices.find(d => d.position === 'back');
-  //const device = useCameraDevice('back');
   const navigation = useNavigation<CameraNavigationProp>();
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  //const [cameraType, setCameraType] = useState(Camera.Con);
+
+  const {hasPermission, requestPermission} = useCameraPermission();
+  const {
+    hasPermission: microphonePerimission,
+    requestPermission: requestMicrophonePermission,
+  } = useMicrophonePermission();
+  const [photo, setPhoto] = useState<PhotoFile>();
+  const [video, setVideo] = useState<VideoFile>();
   const [loading, setLoading] = useState(null);
+
+  const [isActive, setIsActive] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>(
     'back',
@@ -41,17 +55,23 @@ const CameraScreen = () => {
 
   const camera = useRef<Camera>(null);
 
-  const cameraPermission = useCallback(async () => {
-    const permission = await Camera.requestCameraPermission();
-    if (permission === 'denied') {
-      await Linking.openSettings();
-    }
-    setLoading(device);
-  }, [device]);
+  useFocusEffect(
+    useCallback(() => {
+      setIsActive(true);
+      return () => {
+        setIsActive(false);
+      };
+    }, []),
+  );
 
   useEffect(() => {
-    cameraPermission();
-  }, [cameraPermission, device]);
+    if (!hasPermission) {
+      requestPermission();
+    }
+    if (!microphonePerimission) {
+      requestPermission();
+    }
+  }, [hasPermission, microphonePerimission]);
 
   const onChangeCamera = () =>
     setCameraPosition(p => (p === 'back' ? 'front' : 'back'));
@@ -92,7 +112,31 @@ const CameraScreen = () => {
     [flash],
   );
 
-  const takePicture = useCallback(async () => {
+  // const takePicture = useCallback(async () => {
+  //   if (isRecording) {
+  //     camera.current?.stopRecording();
+  //     return;
+  //   }
+  //   try {
+  //     if (camera.current == null) {
+  //       throw new Error('Camera ref is null!');
+  //     }
+  //     const photo = await camera.current.takePhoto(takePhotoOptions);
+  //     console.log('Taking photo...', photo);
+  //     navigation.navigate('Create', {
+  //       image: photo.path,
+  //     });
+  //     // onMediaCaptured(photo, 'photo')
+  //   } catch (e) {
+  //     console.error('Failed to take photo!', e);
+  //   }
+  // }, [camera, takePhotoOptions]);
+
+  const takePicture = async () => {
+    if (isRecording) {
+      camera.current?.stopRecording();
+      return;
+    }
     try {
       if (camera.current == null) {
         throw new Error('Camera ref is null!');
@@ -106,29 +150,26 @@ const CameraScreen = () => {
     } catch (e) {
       console.error('Failed to take photo!', e);
     }
-  }, [camera, takePhotoOptions]);
+  };
 
-  // const setIsPressingButton = useCallback(
-  //   (_isPressingButton: boolean) => {
-  //     isPressingButton.value = _isPressingButton;
-  //   },
-  //   [isPressingButton],
-  // );
-
-  // const onDoubleTap = useCallback(() => {
-  //   onFlipCameraPressed()
-  // }, [onFlipCameraPressed])
-
-  // useEffect(() => {
-  //   const getPermission = async () => {
-  //     const cameraPermission = await Camera.getCameraPermissionStatus();
-  //     const microphonePermission = await Camera.getMicrophonePermissionStatus();
-  //     setHasPermission(
-  //       cameraPermission === 'granted' && microphonePermission === 'granted',
-  //     );
-  //   };
-  //   getPermission();
-  // }, []);
+  const onStartRecording = async () => {
+    console.warn('recording');
+    if (!camera.current) {
+      return;
+    }
+    setIsRecording(true);
+    camera.current.startRecording({
+      onRecordingFinished: video => {
+        console.log('Video', video);
+        setIsRecording(false);
+        setVideo(video);
+        navigation.navigate('Create', {
+          video: video.path,
+        });
+      },
+      onRecordingError: error => setIsRecording(false),
+    });
+  };
 
   const openImageGallery = () => {
     launchImageLibrary(
@@ -151,11 +192,8 @@ const CameraScreen = () => {
     );
   };
 
-  // if (hasPermission === null) {
-  //   return <Text>Loading...</Text>;
-  // }
-  // if (hasPermission === false) {
-  //   return <Text>No access to the camera</Text>;
+  // if (!hasPermission || !microphonePerimission) {
+  //   return <ActivityIndicator />;
   // }
   // if (device == null) {
   //   return <Text>No devices</Text>;
@@ -166,9 +204,10 @@ const CameraScreen = () => {
         style={styles.camara}
         ref={camera}
         device={device}
-        isActive={true}
-        photo={true}
-        video={true}
+        isActive={isActive && !photo}
+        photo
+        video
+        audio
         //setIsPressingButton={setIsPressingButton}
         //animatedProps={cameraAnimatedProps}
       />
@@ -187,8 +226,13 @@ const CameraScreen = () => {
         <Pressable onPress={openImageGallery}>
           <MaterialIcons name="photo-library" size={30} color={colors.white} />
         </Pressable>
-        <Pressable onPress={takePicture}>
-          <View style={styles.circle} />
+        <Pressable onPress={takePicture} onLongPress={onStartRecording}>
+          <View
+            style={[
+              styles.circle,
+              {backgroundColor: isRecording ? colors.error : colors.white},
+            ]}
+          />
         </Pressable>
         <Pressable onPress={onChangeCamera}>
           <MaterialIcons
@@ -210,7 +254,7 @@ const styles = StyleSheet.create({
   },
   camara: {
     width: '100%',
-    aspectRatio: 3 / 4,
+    aspectRatio: 1 / 2,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -223,7 +267,6 @@ const styles = StyleSheet.create({
     width: 75,
     aspectRatio: 1,
     borderRadius: 75,
-    backgroundColor: colors.white,
   },
 });
 

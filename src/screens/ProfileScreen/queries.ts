@@ -1,30 +1,28 @@
-import { gql } from "@apollo/client";
+import {gql} from '@apollo/client';
 
-export const getUser = gql`query GetUser($id: ID!) {
+export const getUser = gql`
+  query GetUser($id: ID!) {
     getUser(id: $id) {
       id
       name
-      image
-      noPosts
-      bio
       username
-      email
+      bio
+      website
+      noPosts
       noFollowers
       noFollowings
-      website
+      image
       Posts {
         nextToken
-        __typename
         items {
-            id
-            image
-            images
-            video
+          id
+          image
+          images
+          video
         }
       }
       createdAt
       updatedAt
-      __typename
     }
   }
-  `
+`;

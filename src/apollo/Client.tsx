@@ -50,6 +50,7 @@ const Client = ({children}: IClient) => {
   const client = useMemo(() => {
     const jwtToken =
       user?.getSignInUserSession()?.getAccessToken().getJwtToken() || '';
+
     const auth: AuthOptions = {
       type: config.aws_appsync_authenticationType as AUTH_TYPE.AMAZON_COGNITO_USER_POOLS,
       jwtToken,

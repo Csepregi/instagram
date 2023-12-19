@@ -40,9 +40,7 @@ const Navigation = () => {
     getUser,
     {variables: {id: userId}},
   );
-  console.log('DATA NAVIGATION, ', data);
   const userData = data?.getUser;
-  console.log('DATA userData, ', userData);
   if (user === undefined || loading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -60,7 +58,7 @@ const Navigation = () => {
         options={{headerShown: false}}
       />
     );
-  } else if (!userData?.username) {
+  } else if (!userData?.email) {
     stackScreens = (
       <Stack.Screen
         name="EditProfile"

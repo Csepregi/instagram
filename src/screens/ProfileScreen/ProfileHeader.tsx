@@ -10,6 +10,9 @@ import {
 import {User} from '../../API';
 import {useAuthContext} from '../../context/AuthContext';
 import UserImage from '../../components/UserImage';
+import { useEffect, useState } from 'react';
+import { Storage } from 'aws-amplify';
+import { DEFAULT_USER_IMAGE } from '../../config';
 
 interface IProfileHeader {
   user: User;
@@ -19,13 +22,23 @@ const ProfileHeader = ({user}: IProfileHeader) => {
   const {userId} = useAuthContext();
   const navigation = useNavigation<ProfileNavigationProp>();
   const {signOut} = useAuthenticator();
-  navigation.setOptions({title: user?.username || 'Profile'});
+  const [imageUri, setImageUri] = useState<string | null>(null);
+
+  useEffect(() => {
+    navigation.setOptions({title: user?.name || 'Profile'});
+  }, [user?.name]);
+
+  useEffect(() => {
+    if (user.image) {
+      Storage.get(user.image).then(setImageUri);
+    }
+  }, [user]);
 
   return (
     <View style={styles.root}>
       <View style={styles.headerRow}>
         {/* Profile image */}
-        <UserImage imageKey={user.image} width={100} />
+        <UserImage imageKey={user.image || DEFAULT_USER_IMAGE} width={100} />
         {/* Posts, followers, following number */}
         <View style={styles.numberContainer}>
           <Text style={styles.numberText}>{user.noPosts}</Text>
@@ -43,8 +56,6 @@ const ProfileHeader = ({user}: IProfileHeader) => {
 
       <Text style={styles.name}>{user.name}</Text>
       <Text>{user.bio}</Text>
-      {console.log('userId ', userId)}
-      {console.log('user.id ', user.id)}
       {userId === user.id && (
         <View style={{flexDirection: 'row'}}>
           <Button

@@ -6,6 +6,7 @@ import logo from '../assets/images/logo.png';
 import {RootNavigator} from '../types/navigation';
 import UpdatePostScreen from '../screens/UpdatePostScreen';
 import PostLikesScreen from '../screens/PostLikesScreen';
+import ProfileStackNavigator from './ProfileStackNavigator';
 
 const Stack = createNativeStackNavigator<RootNavigator>();
 
@@ -19,7 +20,7 @@ const HomeStackNavigator = () => {
       />
       <Stack.Screen
         name="UserProfile"
-        component={ProfileScreen}
+        component={ProfileStackNavigator}
         options={{title: 'Profile'}}
       />
       <Stack.Screen

@@ -30,13 +30,12 @@ export default function PostLikesScreen() {
   }
 
   const likes = data?.likesForPostByUser?.items || [];
-  console.log('DATA ', likes);
   return (
     <>
-    <FlatList
-      data={likes}
-      renderItem={({item}) => console.log('ITEM ', item)}
-    />
+      <FlatList
+        data={likes}
+        renderItem={({item}) => console.log('ITEM ', item)}
+      />
     </>
   );
 }

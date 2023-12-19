@@ -1,32 +1,19 @@
 import {gql} from '@apollo/client';
 
-// export const getUser = gql`
-//   query GetUser($id: ID!) {
-//     getUser(id: $id) {
-//       id
-//       name
-//       image
-//       noPosts
-//       bio
-//       username
-//       email
-//       noFollowers
-//       noFollowings
-//       website
-//       createdAt
-//       updatedAt
-//       __typename
-//     }
-//   }
-// `;
-
 export const getUser = gql`
   query GetUser($id: ID!) {
-    getUser: {
-      id: "6bcd08e2-d72e-4b9a-b60a-f23cc1722a6a",
-      name: "Gabor Csepregi",
-      username: "Gabi"
+    getUser(id: $id) {
+      id
+      name
+      email
+      username
+      bio
+      website
+      image
+      createdAt
+      updatedAt
     }
+  }
 `;
 
 export const updateUser = gql`

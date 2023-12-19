@@ -95,7 +95,7 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
       <View style={styles.header}>
         <UserImage imageKey={post?.User?.image} />
         <Text style={styles.userName} onPress={navigateToUser}>
-          {post.User?.username}
+          {post.User?.name}
         </Text>
         <PostMenu post={post} />
       </View>

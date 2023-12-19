@@ -1,8 +1,8 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
-import {RouteProp} from '@react-navigation/native';
+import {NavigatorScreenParams, RouteProp} from '@react-navigation/native';
 
-export type RootNavigator = {
+export type RootNavigatorParamList = {
   Home: undefined;
   Comments: {postId: string};
   Auth: undefined;
@@ -46,7 +46,7 @@ export type CreateRouteProp = RouteProp<
   'Create'
 >;
 
-export type CommentsRouteProp = RouteProp<RootNavigator, 'Comments'>;
+export type CommentsRouteProp = RouteProp<RootNavigatorParamList, 'Comments'>;
 
 export type MyProfileNavigationProp = BottomTabNavigationProp<
   BottomTabNavigatorParamList,
@@ -60,7 +60,7 @@ export type MyProfileRouteProp = RouteProp<
 
 export type HomeStackNavigatorParamList = {
   Feed: undefined;
-  UserProfile: {userId: string};
+  UserProfile: NavigatorScreenParams<ProfileStackNavigatorParamList>;
   UpdatePost: {id: string};
   PostLikes: {id: string};
 };
@@ -91,7 +91,7 @@ export type FeedNavigationProp = NativeStackNavigationProp<
 >;
 
 export type ProfileStackNavigatorParamList = {
-  Profile: undefined;
+  Profile: {userId: string};
   'Edit Profile': undefined;
 };
 

@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {LinkingOptions, NavigationContainer} from '@react-navigation/native';
 import BottomTabNavigator from './BottomTabNavigator';
 import CommentsScreen from '../screens/CommentsScreen';
-import {RootNavigator} from '../types/navigation';
+import {RootNavigatorParamList} from '../types/navigation';
 import AuthStackNavigator from './AuthStackNavigator';
 import {useAuthContext} from '../context/AuthContext';
 import {useQuery} from '@apollo/client';
@@ -11,9 +11,9 @@ import {GetUserQuery, GetUserQueryVariables} from '../API';
 import {getUser} from './queries';
 import EditProfileScreen from '../screens/EditProfileScreen';
 
-const Stack = createNativeStackNavigator<RootNavigator>();
+const Stack = createNativeStackNavigator<RootNavigatorParamList>();
 
-const linking: LinkingOptions<RootNavigator> = {
+const linking: LinkingOptions<RootNavigatorParamList> = {
   prefixes: ['csepregisphotos://', 'https://csepregisphotos.com'],
   config: {
     initialRouteName: 'Home',

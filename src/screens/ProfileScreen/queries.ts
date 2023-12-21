@@ -22,7 +22,6 @@ export const getUser = gql`
         }
       }
       createdAt
-      updatedAt
     }
   }
 `;

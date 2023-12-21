@@ -9,6 +9,9 @@ export const getUser = gql`
       username
       bio
       website
+      noPosts
+      noFollowers
+      noFollowings
       image
       createdAt
       updatedAt
@@ -24,13 +27,12 @@ export const updateUser = gql`
     updateUser(input: $input, condition: $condition) {
       id
       name
-      image
-      bio
       username
+      bio
       website
+      image
       createdAt
       updatedAt
-      __typename
     }
   }
 `;
@@ -42,22 +44,19 @@ export const deleteUser = gql`
   ) {
     deleteUser(input: $input, condition: $condition) {
       id
-      createdAt
       updatedAt
-      __typename
     }
   }
 `;
 
-export const usersByUsername = gql`query UsersByUsername(
-    $username: String!
+export const usersByUsername = gql`
+  query UsersByUsername(
     $sortDirection: ModelSortDirection
     $filter: ModelUserFilterInput
     $limit: Int
     $nextToken: String
   ) {
     usersByUsername(
-      username: $username
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -66,9 +65,9 @@ export const usersByUsername = gql`query UsersByUsername(
       items {
         id
         username
-       
+      }
       nextToken
-      __typename
+      startedAt
     }
   }
-  `;
+`;

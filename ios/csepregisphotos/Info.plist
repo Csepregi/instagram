@@ -36,9 +36,9 @@
 			</dict>
 		</dict>
 		<key>NSCameraUsageDescription</key>
-		<string>$(PRODUCT_NAME) uses photos</string>
+		<string>$(PRODUCT_NAME) requires to access camera for uploading product images</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>Allow $(PRODUCT_NAME) to use the camera</string>
+		<string>Allow $(PRODUCT_NAME) to access your gallery for uploading product images</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Allow $(PRODUCT_NAME) to use the microphone</string>
 		<key>NSLocationWhenInUseUsageDescription</key>

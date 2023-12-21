@@ -1,4 +1,14 @@
-import {View, FlatList, ActivityIndicator, Text} from 'react-native';
+import {
+  View,
+  FlatList,
+  ActivityIndicator,
+  Text,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  StyleSheet,
+  Keyboard,
+  Platform,
+} from 'react-native';
 import Input from './Input';
 import {useRoute} from '@react-navigation/native';
 import {CommentsRouteProp} from '../../types/navigation';
@@ -85,16 +95,43 @@ const CommentsScreen = () => {
             <Comment comment={item} includeDetails isNew={isNewComment(item)} />
           )
         }
-        style={{padding: 10}}
         inverted
         ListEmptyComponent={() => (
-          <Text style={{padding: 10}}>No comments. Be the first comment</Text>
+          <Text style={{padding: 10, transform: 'rotateX(180deg)'}}>
+            No comments. Be the first comment
+          </Text>
         )}
         onEndReached={() => loadMore()}
       />
-      <Input postId={postId} />
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View>
+            <Input postId={postId} />
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    fontSize: 36,
+  },
+  textInput: {
+    height: 40,
+    borderColor: '#000000',
+    borderBottomWidth: 1,
+  },
+  btnContainer: {
+    backgroundColor: 'white',
+  },
+});
 
 export default CommentsScreen;

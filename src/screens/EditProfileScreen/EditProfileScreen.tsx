@@ -1,5 +1,5 @@
 import {View, Text, Image, ActivityIndicator, Alert} from 'react-native';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {
   Asset,
@@ -117,6 +117,15 @@ const EditProfileScreen = () => {
     });
   };
 
+  useEffect(() => {
+    if (user) {
+      setValue('name', user.name);
+      setValue('username', user.username);
+      setValue('bio', user.bio);
+      setValue('website', user.website);
+    }
+  }, [user, setValue]);
+
   const onChangePhoto = () => {
     launchImageLibrary(
       {mediaType: 'photo'},
@@ -172,8 +181,7 @@ const EditProfileScreen = () => {
   return (
     <View style={styles.page}>
       <Image
-        //source={{uri: selectedPhoto?.uri || user?.image || DEFAULT_USER_IMAGE}}
-        source={{uri: DEFAULT_USER_IMAGE}}
+        source={{uri: selectedPhoto?.uri || user?.image || DEFAULT_USER_IMAGE}}
         style={styles.avatar}
       />
       <Text onPress={onChangePhoto} style={styles.textButton}>
@@ -184,14 +192,6 @@ const EditProfileScreen = () => {
         control={control}
         // rules={{required: true, minLength: {value: 3}}}
         label="Name"
-      />
-      <CustomInput
-        name="username"
-        control={control}
-        rules={{
-          validate: validateUserName,
-        }}
-        label="Username"
       />
       <CustomInput
         name="website"

@@ -1,9 +1,9 @@
 import React from 'react';
 import CustomButton from '../CustomButton';
-import { Auth } from 'aws-amplify';
-import { Alert } from 'react-native';
-import {CognitoHostedUIIdentityProvider} from '@aws-amplify/auth'
- 
+import {Auth} from 'aws-amplify';
+import {Alert} from 'react-native';
+import {CognitoHostedUIIdentityProvider} from '@aws-amplify/auth';
+
 const SocialSignInButtons = () => {
   const onSignInFacebook = async () => {
     try {
@@ -21,10 +21,6 @@ const SocialSignInButtons = () => {
     }
   };
 
-  const onSignInApple = () => {
-    console.warn('onSignInApple');
-  };
-
   return (
     <>
       <CustomButton
@@ -38,12 +34,6 @@ const SocialSignInButtons = () => {
         onPress={onSignInGoogle}
         bgColor="#FAE9EA"
         fgColor="#DD4D44"
-      />
-      <CustomButton
-        text="Sign In with Apple"
-        onPress={onSignInApple}
-        bgColor="#e3e3e3"
-        fgColor="#363636"
       />
     </>
   );
